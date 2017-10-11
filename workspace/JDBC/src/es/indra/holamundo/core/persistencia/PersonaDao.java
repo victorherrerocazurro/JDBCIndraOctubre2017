@@ -39,47 +39,19 @@ public class PersonaDao {
 	// Borrar un registro en la base de datos con la informacion de un persona
 	public void borrarPersonaPorId(long id) throws Exception {
 
-		try {
-			// 2-Obtener la conexion
-			Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "user", "user");
-
-			// Codigo necesario para realizar una consulta con parametros empleando
-			// preparedstatement
-
 			String sql = "delete from APP.PERSONAS where ID = ?";
 
-			PreparedStatement prepareStatement = connection.prepareStatement(sql);
-
-			// Sustituir todas las interrogaciones antes de ejecutar
-
-			prepareStatement.setLong(1, id);
-
-			prepareStatement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new Exception(e);
-		}
+			gestorTransacional.executeUpdate(sql, new Object[] {id});
+			
+			//throw new Exception();
 	}
 
 	// Consultar un registro en la base de datos por su Id
 	public Persona consultarPersonaPorId(long id) throws Exception {
 
-		try {
-			// 2-Obtener la conexion
-			Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "user", "user");
-
-			// Codigo necesario para realizar una consulta con parametros empleando
-			// preparedstatement
-
 			String sql = "select * from APP.PERSONAS where ID = ?";
 
-			PreparedStatement prepareStatement = connection.prepareStatement(sql);
-
-			// Sustituir todas las interrogaciones antes de ejecutar
-
-			prepareStatement.setLong(1, id);
-
-			ResultSet resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = gestorTransacional.executeQuery(sql, new Object[] {id});
 
 			// Me aseguro que el cursor esta en la posicion inicial, que es la posicion
 			// antorior al primer registro valido
@@ -92,24 +64,16 @@ public class PersonaDao {
 			} else {
 				return null;
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new Exception(e);
-		}
 	}
 
 	// Consultar todos los registros en la base de datos
 	public List<Persona> consultarPersona() throws Exception {
 
 		ArrayList<Persona> resultado = new ArrayList<Persona>();
-		
-		try {
-			// Codigo necesario para realizar una consulta con parametros empleando
-			// preparedstatement
 
 			String sql = "select * from APP.PERSONAS";
 
-			
+			ResultSet resultSet = gestorTransacional.executeQuery(sql, new Object[] {});
 			
 			// Me aseguro que el cursor esta en la posicion inicial, que es la posicion
 			// antorior al primer registro valido
@@ -122,11 +86,6 @@ public class PersonaDao {
 			}
 			
 			return resultado;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new Exception(e);
-		}
 	}
 
 }
